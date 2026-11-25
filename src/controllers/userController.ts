@@ -3,6 +3,7 @@ import { User } from "../generated/prisma/client.ts";
 import userService from "../services/userService.ts";
 import { UserCreateInput } from "../generated/prisma/models/User.ts";
 import passwordUtility from "../utils/password/passorodUtility.ts";
+import {CreateUserInputType} from "../schemas/user/createUser.ts";
 
 // userController 라는 이름의 "user"는
 // 경로 상에서 /user로 시작되는 요청이 들어오게 되는 곳이라서 userController임
@@ -17,28 +18,31 @@ import passwordUtility from "../utils/password/passorodUtility.ts";
 const createUser = async (req: Request, res: Response) => {
     // 1. 프론트엔드에서 보내온 정보를 편지에서 읽고
     try {
-        const { username, password, nickName, email, phoneNumber, gender, role } = req.body;
+        const { username, password, nickName, email, phoneNumber, gender } = req.body;
 
         // 2. 그 정보가 옳은지 판단하고
         // 2-1. 안 맞으면 처리가 안 됐다는 내용으로 택배를 보내고
-
-        //                이미 User 테이블에 등록된 '사용자'라는 뜻을 담은 데이터 덩어리가 아니라
-        // 3-0. DB에 보내줄, 'User 테이블에 추가"할" 데이터'를 만들어줌
-        const newUser: UserCreateInput = {
+        const validateUser: CreateUserInputType = {
             username: username,
-            password: await passwordUtility.hashPassword(password),
+            password: password,
             nickName: nickName,
             email: email,
             phoneNumber: phoneNumber,
             gender: gender,
-            role: role,
+        }
+
+        //                이미 User 테이블에 등록된 '사용자'라는 뜻을 담은 데이터 덩어리가 아니라
+        // 3-0. DB에 보내줄, 'User 테이블에 추가"할" 데이터'를 만들어줌
+        const newUser: UserCreateInput = {
+           ...validateUser,
+            password: await passwordUtility.hashPassword(password),
         };
 
         // 3-1, DB에게 newUser 내용을 저장하도록 요청
         //      DB와 통신을 하는 일을 할 service도, 내부에서 일이 끝날 때까지 기다려야 함
         const result = await userService.createUser(newUser);
 
-        // 4, 5. 회원 가입이 됐다는 내용으로 택배를 보내고
+        // 4. 회원 가입이 됐다는 내용으로 택배를 보내고
         // 여기서부터는 응답(Response) 처리
         // res라는, 앞으로 응답에 나갈 박스에
         // result 결과를 json으로 가공하여 넣음
