@@ -6,7 +6,14 @@ import { UserCreateInput } from "../generated/prisma/models/User.ts";
 
 const createUser = async (data: UserCreateInput) => {
     // user 객체를 받아서
-    // DB에 쓰는 일 => prisma.해당테이블명.할일 <= create()
+    // DB에 쓰는 일 => prisma.해당테이블명.할일(객체) <= create()
+    // prisma.user.create({
+    //      data: {                     // 어떤 값을 각 칼럼에 써야되는가를 넣는 프로퍼티, 'data: data' 글자가 같아서 단축해서 쓴 거임
+    //               username: "",
+    //               password: "",
+    //               ...
+    //             }
+    // })
 
     // 이건 백엔드 앱 안에서 일어나는 일이 아니라
     // 외부에 있는 'DB' 라는 시스템과 통신을 하는 일임
@@ -24,13 +31,9 @@ const createUser = async (data: UserCreateInput) => {
 
     // prisma의 create 명령을 내리면
     // 그에 대한 결과는 "생성된" DB 칼럼 정보가 도착됨
-    try {
         return await prisma.user.create({
             data,
         });
-    } catch (error) {
-        console.log(error);
-    }
 };
 
 export default {
