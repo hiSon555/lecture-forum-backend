@@ -1,5 +1,5 @@
-import express from 'express';
-import dotenv from 'dotenv';
+import express from "express";
+import dotenv from "dotenv";
 import cors from "cors";
 import userRouter from "./routes/userRouter.ts";
 
@@ -28,14 +28,9 @@ app.use(express.urlencoded({ extended: true }));
 // cors({ origin: "주소" }) 를 통해 특정 주소에 대해서만 허용 증명을 할 수 있음
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
-
 // 이 앱에 Request가 들어올 때의 경로를 읽어서
 // 첫 번째 매개변수의 값인 '/user' 로 시작하면 => 두 번째 매개변수의 파일로 Routing 시킴
-app.use("/user", userRouter)
-
-
-
-
+app.use("/user", userRouter);
 
 // --------------- Express 구동 부 ------------------
 
@@ -46,7 +41,7 @@ app.use("/user", userRouter)
 const PORT = process.env.PORT;
 
 if (isNaN(Number(PORT))) {
-    console.log('PORT에 오류가 존재함');
+    console.log("PORT에 오류가 존재함");
     // 프로그램 종료 코드
     process.exit(1);
 }

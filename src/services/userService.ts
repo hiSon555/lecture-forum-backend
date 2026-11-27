@@ -31,9 +31,9 @@ const createUser = async (data: UserCreateInput) => {
 
     // prisma의 create 명령을 내리면
     // 그에 대한 결과는 "생성된" DB 칼럼 정보가 도착됨
-        return await prisma.user.create({
-            data,
-        });
+    return await prisma.user.create({
+        data,
+    });
 };
 
 export default {
