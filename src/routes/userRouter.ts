@@ -6,6 +6,8 @@ import userController from "../controllers/userController.ts";
 const router = Router();
 
 router.post("/create", userController.createUser);
+router.post("/login", userController.login)
+
 router.put("/update", () => {})
 router.delete("/delete", () => {})
 router.get("/login", () => {})
